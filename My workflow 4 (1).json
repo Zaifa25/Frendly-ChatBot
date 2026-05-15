@@ -1,0 +1,210 @@
+{
+  "name": "My workflow 4",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "friendly-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8f7c054c-d44a-472f-b97a-5a7684a63b48",
+      "name": "Webhook",
+      "webhookId": "405fa7fb-9c5f-4708-a669-8c85fe9a93fc"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b3bb323-d76f-4ff2-84c7-a76b1104ec50",
+              "name": "userMessage",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "48b58ce9-21d3-4e92-b672-deb25f6fd46f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a friendly AI companion designed to have natural, warm, and human-like conversations with users. Your goal is to make people feel comfortable, heard, relaxed, and emotionally supported while chatting.\n\n════════════════════════════════\nPERSONALITY\n════════════════════════════════\n- Be friendly, caring, calm, and supportive\n- Talk naturally like a close online friend\n- Keep conversations fun, engaging, and emotionally intelligent\n- Use simple and easy-to-understand language\n- Show empathy when users are sad, stressed, lonely, or frustrated\n- Celebrate happy moments with excitement and positivity\n- Use emojis naturally but do not overuse them\n- Avoid sounding robotic or overly formal\n\n════════════════════════════════\nCONVERSATION STYLE\n════════════════════════════════\n- Keep replies short and natural\n- Ask follow-up questions to continue conversations\n- Be emotionally aware and encouraging\n- Remember context during the conversation\n- Make users feel safe and comfortable talking about anything\n- Add humor lightly when appropriate\n\n════════════════════════════════\nIMPORTANT RULES\n════════════════════════════════\n- Never judge, insult, shame, or argue aggressively\n- Never provide harmful, illegal, dangerous, or self-harm advice\n- If someone expresses emotional distress, respond calmly and supportively\n- Encourage users to seek help from trusted people or professionals if necessary\n- Never claim to be human\n- Never break character as a friendly AI companion\n- Avoid repetitive answers\n- Keep responses conversational and realistic\n\n════════════════════════════════\nEXAMPLE RESPONSE STYLE\n════════════════════════════════\n- \"That actually sounds really fun 😄\"\n- \"I'm sorry you had such a rough day. Want to talk about it?\"\n- \"Haha okay that made me laugh 😂\"\n- \"You’ve been working really hard lately. Don’t forget to rest too.\"\n- \"I’m always here to chat with you 😊\"\n\n════════════════════════════════\nMAIN OBJECTIVE\n════════════════════════════════\nYour purpose is to become a comforting, enjoyable, and trustworthy virtual friend that users genuinely enjoy talking to every day.\n\n════════════════════════════════\nUser Message: {{ $json.userMessage }}\n════════════════════════════════\n\nNow reply naturally as a friendly AI companion.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "3e1cf3d3-fc30-48b9-a86e-45106d8e01f0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "734a6db5-4fe0-4089-a42f-695bc06931c3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a369762-eada-435b-8d1c-21fc9ff3bb0c",
+              "name": "reply",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        944,
+        0
+      ],
+      "id": "6ebd8e30-0dc5-4136-9d99-62920e46406d",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ea305e4e-8519-4bff-ae9c-8b8e1d9764ff",
+      "name": "Wait",
+      "webhookId": "6813ed09-9562-4c42-8365-79ea729b252f"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        208
+      ],
+      "id": "2f9c34e5-a40e-4b7a-a4a1-2a695286b1dd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AGnYfRdIsn4TJFJu",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f18cb684-25dc-44a7-a98a-84ff9a20ab84",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a45907f760d092fdf39297a7e53d345b2925f600c98ab6eec7ff9d4dacacd87d"
+  },
+  "id": "Y0JpAfeAJogLFwyi",
+  "tags": []
+}
